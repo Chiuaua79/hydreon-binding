@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="hydreon"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="hydreon_rg9">
+		<label>Hydreon RG-9</label>
+		<description>Hydreon RG-9 Optical Rain Sensor</description>
+		<channel-groups>
+			<channel-group id="sensors" typeId="sensors"/>
+			<channel-group id="interaction" typeId="interaction"/>
+			<channel-group id="device-info" typeId="device-info"/>
+		</channel-groups>
+		<config-description>
+			<parameter name="port" type="text" required="true">
+				<label>Serial Port</label>
+				<context>serial-port</context>
+				<limitToOptions>false</limitToOptions>
+				<description>Serial port that the Hydreon sensor is available on</description>
+			</parameter>
+			<parameter name="intensityLevel" type="integer" required="false" min="0" max="7">
+				<label>Intensity Level</label>
+				<description>Override DIP switch intensity (1-7) or 0 for DIP setting</description>
+				<default>0</default>
+			</parameter>
+			<parameter name="holdTime" type="integer" required="false" min="0" max="360">
+				<label>Override Hold Time</label>
+				<description>Set the override hold time in minutes (0-360)</description>
+			</parameter>
+			<parameter name="disableLed" type="boolean" required="false">
+				<label>Disable LED</label>
+				<description>Disable LED when the Output activates</description>
+				<default>false</default>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+	<channel-group-type id="sensors">
+		<label>Sensors</label>
+		<description>The sensor types of the Hydreon RG-9 device</description>
+		<channels>
+			<channel id="rain-intensity" typeId="rain-intensity"/>
+			<channel id="temperature" typeId="temperature"/>
+		</channels>
+	</channel-group-type>
+	<channel-group-type id="interaction">
+		<label>Interactions</label>
+		<description>Interact with the Hydreon RG-9 device</description>
+		<channels>
+			<channel id="kill" typeId="kill"/>
+		</channels>
+	</channel-group-type>
+	<channel-group-type id="device-info">
+		<label>Device Info</label>
+		<description>Device info for the connected Hydreon RG-9 device</description>
+		<channels>
+			<channel id="reset" typeId="reset"/>
+			<channel id="power-days" typeId="power-days"/>
+			<channel id="dip-switch" typeId="dip-switch"/>
+		</channels>
+	</channel-group-type>
+
+	<channel-type id="rain-intensity">
+		<item-type>Number</item-type>
+		<label>Rain Intensity</label>
+		<description>Rain intensity</description>
+		<category>Rain</category>
+		<state readOnly="true" min="0" max="7" pattern="%d">
+		</state>
+	</channel-type>
+
+	<channel-type id="kill">
+		<item-type>Switch</item-type>
+		<label>Kill switch</label>
+		<description>Send kill (reset) command to sensor</description>
+		<category>Switch</category>
+		<state readOnly="false">
+		</state>
+	</channel-type>
+
+	<channel-type id="temperature" advanced="true">
+		<item-type>Number:Temperature</item-type>
+		<label>Temperature</label>
+		<description>Temperature</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%.1f %unit%">
+		</state>
+	</channel-type>
+
+	<channel-type id="reset" advanced="true">
+		<item-type>String</item-type>
+		<label>Reset Reason</label>
+		<description>Shows the reason the device was reset</description>
+		<category>Text</category>
+		<state readOnly="true">
+			<options>
+				<option value="N">Normal Power Up</option>
+				<option value="M">MCLR</option>
+				<option value="W">Watchdog Timer Reset</option>
+				<option value="O">Stack Overflow</option>
+				<option value="U">Stack Underflow</option>
+				<option value="B">Low Voltage</option>
+				<option value="D">Other</option>
+			</options>
+		</state>
+	</channel-type>
+
+	<channel-type id="power-days" advanced="true">
+		<item-type>Number</item-type>
+		<label>Power Days</label>
+		<description>Number of days sensor is powered ON</description>
+		<category>Switch</category>
+		<state readOnly="true" pattern="%d">
+		</state>
+	</channel-type>
+
+	<channel-type id="dip-switch" advanced="true">
+		<item-type>String</item-type>
+		<label>DIP Switch</label>
+		<description>Sensor's DIP switch setting</description>
+		<category>Text</category>
+		<state readOnly="true">
+		</state>
+	</channel-type>
+
+</thing:thing-descriptions>
